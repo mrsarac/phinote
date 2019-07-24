@@ -1,0 +1,162 @@
+$font-family: sans-serif;
+$font-size: 1em;
+$font-weight: 400;
+
+$line-height: 1.5em;
+
+$color: #282828;
+$color-bg: #d8d6d8;
+$color-border: #dfdfdf;
+$color-border-outline: #C6C6C6;
+$color-border-outline-hover: #eaeaea;
+
+$color-placeholder: #b2b2b2;
+
+
+
+
+.search {
+
+    width: 100%;
+    margin-left: 10px;
+    -webkit-app-region: no-drag;
+
+    .field {
+        position: relative;
+    }
+
+    label {
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAAxElEQVR4AXXPIUuDcRDA4Zv4AUSwTLEKVoNlySyCYLO98CCsahGrX0AW/QhmBRHEJghLS4JFBBXDgrJi2In78w8v4v3S8XDh4nd0DTxLEzd2RC2EnrH07trQVDrXqbhs7FvfnBDWDKWTigOpL2oWvZpYKPjio1zVHEt7BdOtaLUtHRX8MmqjRjooeCVttPBOWi+4JT1aLaDjVLpU/5ytn840Dj1IaWSpYmi8yVlTF54qh9K8nn27usJK5fC3yvfhPx7a/AE9dYwDEfKrlAAAAABJRU5ErkJggg==) no-repeat 0 50%;
+      color: $color-placeholder;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      transition: left .4s, transform .4s;
+      padding-left: 1.25em;
+    }
+
+    .input-search {
+        border: 1px solid $color-border;
+        border-radius: 2px;
+        display: block;
+        font: $font-weight #{$font-size}/#{$line-height} $font-family;
+        padding: .2em 1.75em;
+        width: 100%;
+      &:hover {
+        border: 1px solid $color-border-outline-hover;
+        transition: 0.6s all ease;
+      }
+
+        &:focus,
+        &:valid {
+
+        	outline: none;
+ 			    border: 1px solid $color-border-outline;
+            &+label {
+                left: .5em;
+                transform: translate(0, -50%);
+            }
+        }
+
+        &:valid {
+
+            &+label {
+                text-indent: -9999px;
+            }
+        }
+    }
+}
+
+
+// /*SEARCH*/
+// .search {
+// 	-webkit-transform: translate(-50%, -50%);
+// 	-moz-transform: translate(-50%, -50%);
+// 	-o-transform: translate(-50%, -50%);
+// 	-ms-transform: translate(-50%, -50%);
+// 	transform: translate(-50%, -50%);
+// 	width: 16px;
+// 	height: 16px;
+// 	-webkit-border-radius: 100%;
+// 	border-radius: 100%;
+// 	background: #BFBFBF;
+// 	cursor: pointer;
+// 	/*border: 1px solid #FFFFFF;*/
+// 	-webkit-transition: all 0.1s ease;
+// 	-moz-transition: all 0.1s ease;
+// 	-o-transition: all 0.1s ease;
+// 	-ms-transition: all 0.1s ease;
+// 	display: block;
+// 	position: absolute;
+// 	top: 50%;
+// 	left: 50%;
+// }
+// /*.search:hover
+// {
+// 	background-color: #999999;
+// 	box-shadow: 0px 0px 6px #BFBEBE;
+// }*/
+// .search:before, .search:after {
+// 	content: '';
+// 	position: absolute;
+// 	display: block;
+// }
+// .search:before {
+// 	width: 12px;
+// 	height: 12px;
+// 	background: rgba(255, 255, 255, 0.731);
+// 	-webkit-border-radius: 10px;
+// 	border-radius: 10px;
+// 	margin: 2px;
+// 	-webkit-transform: rotate(45deg);
+// 	-moz-transform: rotate(45deg);
+// 	-o-transform: rotate(45deg);
+// 	-ms-transform: rotate(45deg);
+// 	transform: rotate(45deg);
+// 	-webkit-transition: all 0.1s ease;
+// 	-moz-transition: all 0.1s ease;
+// 	-o-transition: all 0.1s ease;
+// 	-ms-transition: all 0.1s ease;
+// 	transition: all 0.1s ease;
+// }
+// .search:after {
+// 	width: 2px;
+// 	height: 7px;
+// 	background: #BFBFBF;
+// 	-webkit-border-radius: 4px;
+// 	border-radius: 4px;
+// 	margin: 12px 0 0 13px;
+// 	-webkit-transform: rotate(-45deg);
+// 	-moz-transform: rotate(-45deg);
+// 	-o-transform: rotate(-45deg);
+// 	-ms-transform: rotate(-45deg);
+// 	transform: rotate(-45deg);
+// 	-webkit-transition: all 0.2s ease;
+// 	-moz-transition: all 0.2s ease;
+// 	-o-transition: all 0.2s ease;
+// 	-ms-transition: all 0.2s ease;
+// 	transition: all 0.2s ease;
+// }
+// .search.active {
+// 	background: #FAFAFA;
+// 	border: 2px solid #BFBFBF;
+// 	box-shadow: 0px 0px 0px #C4C4C4;
+// }
+// /*.search.active:hover
+// {
+// 	background-color: #FFFFFF;
+// 	box-shadow: 0px 0px 6px #BFBEBE;
+// }*/
+// .search.active:before {
+// 	background: #888;
+// 	width: 2px;
+// 	height: 12px;
+// 	margin: 2px 0 0 7px;
+// }
+// .search.active:after {
+// 	width: 2px;
+// 	height: 12px;
+// 	background: #888888;
+// 	margin: 2px 0 0 7px;
+// }

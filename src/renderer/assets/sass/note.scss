@@ -1,0 +1,249 @@
+/*NOTE START*/
+
+
+
+.note-control {
+    display: flex;
+    height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    position: relative;
+    font-size: 14px;
+    color: #BDBDBD;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+
+    background: #FFFFFF;
+    will-change: transform, opacity;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+
+    &.disable {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+}
+
+.note-control:hover {
+    opacity: 1 !important;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+}
+
+.note-control .note-list-open {
+    width: 0px;
+    overflow: hidden;
+    display: none;
+}
+
+.note-control--text-styles {
+    margin-left: 20px;
+}
+
+.note-control--text-styles a {
+    color: #BDBDBD;
+    margin-right: 5px;
+    padding: 3px 5px;
+    text-align: center;
+}
+
+.note-control--text-styles a>.fa {}
+
+.note-control--text-styles a:hover {
+    color: #929292;
+}
+
+.note-control--tag-list {
+    position: relative;
+    margin-left: 10px;
+}
+
+.note-control--tag-list .fa-tags {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    color: #929292;
+}
+
+.note-control--tag-list-input {
+    border: 1px solid #E9E9E9;
+    padding: 0 10px;
+    line-height: 26px;
+    border-radius: 2px;
+    color: #838383;
+    background: #FFFFFF;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.note-control--tag-list-input:focus {
+    outline: 0 none;
+    border: 1px solid #BCBCBC;
+}
+
+.note-control--new-note {
+    margin-right: 15px;
+}
+
+.note--content {
+
+
+    line-height: 22px;
+    font-size: 14px;
+    position: relative;
+
+    margin-right: 0px;
+    z-index: 1;
+
+  .area {
+    div:focus {
+      outline: 0 none;
+    }
+    &.disable {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .title {
+      padding-left: 20px;
+      padding-right: 20px;
+      font-size: 17px;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .text {
+      overflow-y: scroll;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 40px;
+
+      word-break: break-all;
+      height: calc(100vh - 140px);
+
+      .gg-editable-text span {
+        height: 100%;
+      }
+    }
+  }
+
+
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    h1 {
+        font-size: 17px;
+    }
+
+    ul {
+        margin-bottom: 20px;
+    }
+
+}
+
+
+.note--footer {
+
+  z-index: 2;
+  color: #BDBDBD;
+  font-size: 14px;
+  padding:20px;
+  display: flex;
+  background: white;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+
+  .note-footer-deleting {
+
+    a {
+      display: inline-flex;
+      min-height: 20px;
+    }
+
+    display: flex;
+    align-items: center;
+
+    .note-delete-a {
+
+      color: #BDBDBD;
+      display: inline-block;
+
+      .note-delete-hover {
+        transition: transform .3s ease-in-out;
+      }
+
+      &.are-you {
+        margin-right: 5px;
+      }
+    }
+
+    .note-delete-btn {
+      background: #000;
+      display: inline-block;
+      padding: 3px 10px;
+      margin: 0 5px;
+      &:hover {
+        text-decoration: underline;
+      }
+      &.yes {
+        background-color: #F76060;
+        color: #fff;
+      }
+      &.no {
+        color: #333;
+        background-color: #efefef;
+      }
+      &.inbox {
+        color: #fff;
+        background-color: #2080ef;
+      }
+    }
+
+  }
+
+  .note-status {
+    text-align: right;
+  }
+
+}
+
+
+
+
+.note-sync-status {
+  color: #BDBDBD;
+  display: inline-block;
+  &.sync-started {
+    animation: spin 1s ease-in-out infinite;
+  }
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+
+
+.no-content {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  margin: 0 auto;
+  .no-content-text {
+    color: #b2b2b2;
+  }
+}
+/*NOTE END*/

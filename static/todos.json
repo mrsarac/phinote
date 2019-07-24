@@ -1,0 +1,26 @@
+{
+  "todos": [
+    {
+      "id": 0,
+      "title": "Todo 1",
+      "text": "İçerik 1",
+      "completed": false,
+      "type": "TODO"
+    },
+    {
+      "id": 1,
+      "title": "Todo 2",
+      "text": "İçerik 2",
+      "completed": false,
+      "type": "TODO"
+    }
+  ,
+    {
+      "id": 2,
+      "title": "Todo 3",
+      "text": "İçerik ^",
+      "completed": true,
+      "type": "TODO"
+    }
+  ]
+}

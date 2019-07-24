@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="29px" height="20px" viewBox="0 0 29 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>new-note</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="App-Main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Note" transform="translate(-26.000000, -45.000000)">
+            <g id="new-note" transform="translate(26.000000, 45.000000)">
+                <rect id="Rectangle-8" fill="#FFFFFF" x="0" y="0" width="29" height="20"></rect>
+                <g id="Group-5" transform="translate(7.000000, 2.000000)" fill-rule="nonzero">
+                    <path d="M4.63681277,15.0268799 L0.826043196,15.0379428 L0.818406383,11.0758312 L11.1662877,0.456202379 C11.4474447,0.164161251 11.8294242,-2.24591118e-14 12.2278047,0 C12.6261851,2.24591118e-14 13.0081646,0.164161251 13.2893216,0.456202379 L14.8777787,2.10774075 C15.1601981,2.39984807 15.3188696,2.79610425 15.3188696,3.20929314 C15.3188696,3.62248202 15.1601981,4.0187382 14.8777787,4.31084552 L4.63681277,15.0268799 Z" id="write-path" stroke="#717171"></path>
+                    <polygon id="write-path" fill="#FFFFFF" points="2.34576894 13.4464604 4.63681277 13.4464604 2.34576894 11.0758312"></polygon>
+                    <path d="M1.5,10.5 L5,14 L1.5,10.5 Z" id="write-path" stroke="#717171"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
