@@ -47,7 +47,7 @@
 
           const config = {
             params: {
-              key: 'AIzaSyB-Qvdz0Z1VnXvztbMGwVAnn7RVF8w2deQ',
+              key: '-',
               address: qCity
             }
           }
@@ -74,7 +74,7 @@
             this.lng = address.geometry.location.lng;
           }
 
-          GoogleMapsLoader.KEY = 'AIzaSyB-Qvdz0Z1VnXvztbMGwVAnn7RVF8w2deQ';
+          GoogleMapsLoader.KEY = '-';
 
           GoogleMapsLoader.load(function(google) {
 
