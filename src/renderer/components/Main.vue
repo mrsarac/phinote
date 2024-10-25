@@ -10,23 +10,24 @@
   </div>
 </template>
 
-<script>
-  import Menu from './Menu';
-  import Notes from './Notes';
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import Menu from './Menu';
+import Notes from './Notes';
 
-  export default {
-    components: { Menu, Notes },
-    data() {
-      return {
-        isMainListVisible: true,
-      };
-    },
-    methods: {
-      setMainListVisible() {
-        return this.isMainListVisible = !this.isMainListVisible;
-      },
+export default defineComponent({
+  components: { Menu, Notes },
+  setup() {
+    const isMainListVisible = ref(true);
 
-    },
-  };
+    const setMainListVisible = () => {
+      isMainListVisible.value = !isMainListVisible.value;
+    };
+
+    return {
+      isMainListVisible,
+      setMainListVisible
+    };
+  }
+});
 </script>
-

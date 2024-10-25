@@ -9,29 +9,31 @@
   </div>
 </template>
 
-<script>
-  import Menu from "./Menu";
-  import Notes from "./Notes";
+<script lang="ts">
+import { defineComponent, ref, onBeforeRouteUpdate } from 'vue';
+import Menu from "./Menu";
+import Notes from "./Notes";
 
-  export default {
-    components: {Menu, Notes},
+export default defineComponent({
+  components: { Menu, Notes },
+  setup() {
+    const selectedTagId = ref<number | null>(null);
+    const selectedTagName = ref<string | null>(null);
 
-    data() {
-      return {
-        selectedTagId: null,
-        selectedTagName: null,
-      };
-    },
-    created() {
-      this.selectedTagId = this.$route.params.id;
-      this.selectedTagName = this.$route.params.name;
-    },
-    beforeRouteUpdate(to, from, next) {
-      this.selectedTagId = to.params.id
-      this.selectedTagName = to.params.name
-      next()
-    }
+    onBeforeRouteUpdate((to, from, next) => {
+      selectedTagId.value = to.params.id;
+      selectedTagName.value = to.params.name;
+      next();
+    });
 
+    return {
+      selectedTagId,
+      selectedTagName
+    };
+  },
+  created() {
+    this.selectedTagId = this.$route.params.id;
+    this.selectedTagName = this.$route.params.name;
   }
+});
 </script>
-

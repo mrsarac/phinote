@@ -12,73 +12,87 @@
     </div>
   </div>
 </template>
-<script>
-  import editable from './Editable';
 
-  export default {
-    name: 'Todo',
-    components: {editable},
-    props: ['data'], // declare the props
-    data() {
-      return {
-        todos: {},
-        todo: {},
-        isTodoCreatedStatus: false,
-        todoId: null,
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import editable from './Editable';
+
+export default defineComponent({
+  name: 'Todo',
+  components: { editable },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    const todos = ref<any[]>([]);
+    const todo = ref<any>({});
+    const isTodoCreatedStatus = ref<boolean>(false);
+    const todoId = ref<number | null>(null);
+
+    const gtd = () => {
+      isTodoCreatedStatus.value = false;
+      todo.value = props.data;
+      setTimeout(() => {
+        isTodoCreatedStatus.value = true;
+      }, 0);
+    };
+
+    const triggerUpdate = () => {
+      updateTodo();
+    };
+
+    const triggerDisable = () => {
+      // @ts-ignore
+      this.$parent.isDisabled = true;
+    };
+
+    const updateTodo = () => {
+      todos.value = JSON.parse(localStorage.getItem('todos') || '[]');
+
+      const todoToUpdate = todos.value.find((v) => v.id === todo.value.id);
+      if (todoToUpdate) {
+        todoToUpdate.title = todo.value.title;
+        todoToUpdate.text = todo.value.text;
       }
-    },
-    created() {
-       if(this.todo.length <= 0) {
-         this.todo.title = "Hello";
-         this.todo.text = "World";
-       }
-    },
-    methods: {
 
-      gtd: function() {
-        this.isTodoCreatedStatus = false;
-        this.todo = this.data;
-        setTimeout(function() {
-          // Activate editables
-          this.isTodoCreatedStatus = true
-        }.bind(this),0);
+      setTimeout(() => {
+        localStorage.setItem('todos', JSON.stringify(todos.value));
+        // @ts-ignore
+        this.$parent.getTodos();
+        // @ts-ignore
+        this.$parent.isDisabled = false;
+      }, 0);
+    };
 
-      },
-
-      triggerUpdate: function() {
-        // "Update triggerd from editable
-        this.updateTodo();
-      },
-
-      triggerDisable: function() {
-        this.$parent.isDisabled = true;
-      },
-
-      updateTodo: function () {
-        this.todos = JSON.parse(localStorage.getItem('todos'));
-
-        this.todos.find(v => v.id == this.todo.id).title = this.todo.title;
-        this.todos.find(v => v.id == this.todo.id).text = this.todo.text;
-
-        setTimeout(function() {
-          localStorage.setItem('todos', JSON.stringify(this.todos));
-          this.$parent.getTodos();
-          this.$parent.isDisabled = false;
-        }.bind(this),0);
-
-      },
-
-    },
-    computed: {
-      parentTodo() {
-        if(this.data === null) {
-          return false
-        }
-        // console.log("parent todo", this.data);
-        this.gtd();
-        return this.data;
+    const parentTodo = computed(() => {
+      if (props.data === null) {
+        return false;
       }
-    },
+      gtd();
+      return props.data;
+    });
+
+    onMounted(() => {
+      if (todo.value.length <= 0) {
+        todo.value.title = "Hello";
+        todo.value.text = "World";
+      }
+    });
+
+    return {
+      todos,
+      todo,
+      isTodoCreatedStatus,
+      todoId,
+      gtd,
+      triggerUpdate,
+      triggerDisable,
+      updateTodo,
+      parentTodo
+    };
   }
-
+});
 </script>

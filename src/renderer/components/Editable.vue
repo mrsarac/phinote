@@ -1,47 +1,54 @@
 <template>
   <div contenteditable="true" @input="update"></div>
 </template>
-<script>
 
-  export default {
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
 
-    name: 'editable',
-    props:['content'],
-    data() {
-      return {
-        timeout: 0,
-    }},
-    mounted:function(){
-      this.$el.innerText = this.content;
-    },
-    methods:{
+export default defineComponent({
+  name: 'editable',
+  props: {
+    content: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props, { emit }) {
+    const timeout = ref<number | null>(null);
+    const el = ref<HTMLElement | null>(null);
 
-      triggerNoteUpdate: function() {
-        this.$parent.triggerUpdate()
-      },
+    const triggerNoteUpdate = () => {
+      emit('triggerUpdate');
+    };
 
-      triggerDisableStatus: function() {
-        this.$parent.triggerDisable()
-      },
+    const triggerDisableStatus = () => {
+      emit('triggerDisable');
+    };
 
-      update:function(event){
+    const update = (event: Event) => {
+      triggerDisableStatus();
 
-        this.triggerDisableStatus();
-
-        if(this.timeout){ clearTimeout(this.timeout);}
-
-        this.timeout = setTimeout(function() {
-          // console.log("Can you update?");
-          this.triggerNoteUpdate();
-        }.bind(this),500);
-        // bu bind  .. yukaridaki this e erisebildim sonunda
-
-        this.$emit('update',event.target.innerText);
-
+      if (timeout.value) {
+        clearTimeout(timeout.value);
       }
 
+      timeout.value = setTimeout(() => {
+        triggerNoteUpdate();
+      }, 500);
 
-    }
+      emit('update', (event.target as HTMLElement).innerText);
+    };
+
+    onMounted(() => {
+      if (el.value) {
+        el.value.innerText = props.content;
+      }
+    });
+
+    return {
+      el,
+      update
+    };
   }
-
+});
 </script>

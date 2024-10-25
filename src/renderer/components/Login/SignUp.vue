@@ -65,70 +65,76 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import axios from 'axios';
 
-  import axios from 'axios';
+export default defineComponent({
+  name: 'SignUp',
+  setup() {
+    const bgImg = ref<string>(bg());
+    const message = ref<string | null>(null);
+    const messageSuccess = ref<string | null>(null);
+    const name = ref<string | null>(null);
+    const password = ref<string | null>(null);
+    const mailAddress = ref<string | null>(null);
+    const loading = ref<boolean>(false);
 
-  export default {
-    name: 'SignUp',
-    data() {
-      return {
-        bgImg: this.bg(),
-        message: null,
-        messageSuccess: null,
-        name: null,
-        password: null,
-        mailAddress: null,
-        loading: false,
+    const signUp = async () => {
+      const url = `${import.meta.env.VITE_SERVER_URL}/api/users/save`;
+
+      const data = {
+        name: name.value,
+        password: password.value,
+        mailAddress: mailAddress.value,
       };
-    },
-    created() {
 
-    },
-    computed: {
+      loading.value = true;
 
-    },
-    methods: {
-      signUp() {
-        const url = `${this.$serverURL}/api/users/save`;
+      try {
+        const response = await axios.post(url, data);
+        signUpSuccessfull(response);
+      } catch (error) {
+        signUpFailed(error);
+      }
+    };
 
-        const data = {
-          name: this.name,
-          password: this.password,
-          mailAddress: this.mailAddress,
-        };
+    const signUpSuccessfull = (response: any) => {
+      loading.value = false;
 
-        this.loading = true;
+      messageSuccess.value = "Thanks for Sign up. It's completed, Please check your mail. Now you are redirected to login page";
 
-        axios.post(url, data)
-          .then(response => this.signUpSuccessfull(response))
-          .catch(error => this.signUpFailed(error));
-      },
+      setTimeout(() => {
+        this.$router.push(this.$route.query.redirect || '/login');
+      }, 10000);
+    };
 
-      signUpSuccessfull() {
-        this.loading = false;
+    const signUpFailed = (error: any) => {
+      loading.value = false;
+      message.value = `${error.message} Error: Please check your information: ${error.response.data.message}`;
+    };
 
-        this.messageSuccess = "Thanks for Sign up. It's completed, Please check your mail. Now you are redirected to login page";
+    const bg = (): string => {
+      const rnm = Math.floor(Math.random() * 4) + 1;
+      const b = `url("/static/images/login-bg-${rnm}.png")`;
+      return b;
+    };
 
-        setTimeout(() => {
-          this.$router.push(this.$route.query.redirect || '/login');
-        }, 10000);
-      },
-
-      signUpFailed(error) {
-        this.loading = false;
-        this.message = `${error.message} Error: Please check your information: ${error.response.data.message}`;
-      },
-
-      bg() {
-        const rnm = Math.floor(Math.random() * 4) + 1;
-        const b = `url("/static/images/login-bg-${rnm}.png")`;
-        return b;
-      },
-
-    },
-  };
-
+    return {
+      bgImg,
+      message,
+      messageSuccess,
+      name,
+      password,
+      mailAddress,
+      loading,
+      signUp,
+      signUpSuccessfull,
+      signUpFailed,
+      bg
+    };
+  }
+});
 </script>
 
 <style lang="scss">
