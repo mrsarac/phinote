@@ -3,12 +3,15 @@
     SOKKETTT
   </div>
 </template>
-<script>
-  // import VueSocketio from 'vue-socket.io';
 
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-
+export default defineComponent({
+  name: 'SocketTestDetail',
+});
 </script>
+
 <style lang="scss">
   .socket-main {
     padding: 2em;

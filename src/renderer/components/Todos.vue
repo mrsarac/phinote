@@ -36,174 +36,148 @@
     <Todo :data="selectedTodo"></Todo>
   </div>
 </template>
-<script>
 
-  import axios from 'axios';
-  import Todo from "./Todo";
-  import {textSlice} from '../utils/filters';
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+import Todo from "./Todo";
+import { textSlice } from '../utils/filters';
 
-  export default {
-    components: {Todo},
-    filters: { textSlice },
-    name: 'Todos',
-    data() {
-      return {
-        isLoading: true,
-        selectedTodoId: null, // default value
-        selectedTodo: {}, // default value
-        search: '',
-        todos: {},
-        isDisabled: false,
+export default defineComponent({
+  components: { Todo },
+  filters: { textSlice },
+  name: 'Todos',
+  setup() {
+    const isLoading = ref(true);
+    const selectedTodoId = ref<number | null>(null);
+    const selectedTodo = ref<any>({});
+    const search = ref<string>('');
+    const todos = ref<any[]>([]);
+    const isDisabled = ref<boolean>(false);
+
+    const getTodos = () => {
+      isLoading.value = false;
+      const url = '/static/todos.json';
+
+      if (localStorage.getItem('todos')) {
+        todosGetLocalStorage();
+      } else {
+        axios.get(url)
+          .then(response => todosGetSuccessfull(response))
+          .catch(() => todosGetFailed());
       }
-    },
-    mounted() {
+    };
 
-    },
-    created() {
-      this.getTodos();
+    const todosGetSuccessfull = (response: any) => {
+      isLoading.value = false;
+      todos.value = response.data.todos;
+      localStorage.setItem('todos', JSON.stringify(response.data.todos));
+    };
 
-      setTimeout(function() {
-        this.getTodo(this.todos[0]);
-      }.bind(this),100);
+    const todosGetFailed = () => {
+      console.log("Fail");
+    };
 
-    },
-    methods: {
+    const todosGetLocalStorage = () => {
+      todos.value = JSON.parse(localStorage.getItem('todos') || '[]');
+    };
 
-      getTodos: function() {
+    const saveTodo = (id: number) => {
+      setTimeout(() => {
+        localStorage.setItem('todos', JSON.stringify(todos.value));
+      }, 0);
+    };
 
-        this.isLoading = false;
-        let url = '/static/todos.json';
+    const addTodo = () => {
+      const todosIdArray = todos.value.length === 0 ? [0] : todos.value.map((todo: any) => todo.id);
+      const largestId = Math.max(...todosIdArray);
 
-        if ( localStorage.getItem('todos') ) {
-          this.todosGetLocalStorage();
-        } else {
-          // localStorage has not todos, we are loading samples
-          axios.get(url)
-            .then(response => this.todosGetSuccessfull(response))
-            .catch(() => this.todosGetFailed())
-        }
+      todos.value.push({
+        id: largestId + 1,
+        title: "New todo",
+        text: "Awesome Todo detail",
+        completed: false,
+      });
 
+      saveTodo();
+    };
 
-      },
-      todosGetSuccessfull(response) {
-        // console.log("Success");
-        this.isLoading = false;
-        this.todos = response.data.todos;
-        localStorage.setItem('todos', JSON.stringify(response.data.todos));
-      },
+    const deleteTodo = (index: number) => {
+      if (todos.value.length > 1) {
+        todos.value.splice(index, 1);
+        saveTodo();
+        setTimeout(() => {
+          getTodo(todos.value[0]);
+        }, 0);
+      } else {
+        alert("You cannot delete the last todo item");
+      }
+    };
 
-      todosGetFailed() {
-        console.log("Fail");
-      },
+    const getTodo = (todo: any) => {
+      selectedTodo.value = todo;
+    };
 
-      todosGetLocalStorage() {
-        //  Using local storega
-        this.todos = JSON.parse(localStorage.getItem('todos'));
-      },
+    const getFailed = () => {
+      console.log("Get failed, go to login...");
+      localStorage.removeItem('token');
+      localStorage.removeItem('todos');
+    };
 
-      saveTodo(id) {
-        // writing new data
-        setTimeout(function() {
-          localStorage.setItem('todos', JSON.stringify(this.todos));
-        }.bind(this),0);
-      },
+    const clearCompleted = () => {
+      todos.value = todos.value.filter(todo => !todo.completed);
 
-      addTodo() {
-        // Creating an numbers array
-        let todosIdArray = new Array;
-
-        if(this.todos.length === 0) {
-          todosIdArray = [0];
-        }
-
-        for(var o in this.todos) {
-          todosIdArray.push(this.todos[o].id);
-        }
-
-        let largestId = Math.max.apply(Math, todosIdArray)
-
-        this.todos.push({
-          id: largestId+1,
-          title: "New todo" ,
-          text: "Awesome Todo detail",
-          completed: false,
-        });
-
-        this.saveTodo();
-
-      },
-
-      deleteTodo(id) {
-        if (this.todos.length > 1) {
-          this.$delete(this.todos, id);
-          this.saveTodo();
-
-        setTimeout(function() {
-            this.getTodo(this.todos[0]);
-          }.bind(this),0);
-
-        } else {
-          alert("You connot delete last todo item");
-        }
-      },
-
-      getTodo: function (todo) {
-          this.selectedTodo = todo
-      },
-
-      getFailed: function () {
-        console.log("Get failied, go to login...");
-        localStorage.removeItem('token');
-        localStorage.removeItem('todos');
-        // localStorage.clear();
-        // this.$router.push(this.$route.query.redirect || '/login');
-      },
-
-      clearCompleted: function () {
-
-        this.todos = this.todos.filter(function (e){
-          return e.completed !== true;
-        })
-
-        if(this.todos.length === 0) {
-          this.addTodo();
-        }
-
-        this.getTodo(this.todos[0]);
-
-        this.saveTodo();
-
+      if (todos.value.length === 0) {
+        addTodo();
       }
 
-    },
-    computed: {
-      filteredTodos() {
-        if(this.todos.length >= 1) {
-          return this.todos.filter(post => {
-            return post.title.toLowerCase().includes(this.search.toLowerCase())
-          })
-        }
-      },
-      totalCount() {
-        if(this.todos.length >= 1) {
-          return this.filteredTodos.length
-        }
-      },
+      getTodo(todos.value[0]);
+      saveTodo();
+    };
 
-      totalCompleted() {
-        let todosComletedCount = 0;
-        for(var o in this.todos) {
-          if(this.todos[o].completed === true) {
-            todosComletedCount++;
-          }
-        }
-        return todosComletedCount
-      }
-    },
+    onMounted(() => {
+      getTodos();
+      setTimeout(() => {
+        getTodo(todos.value[0]);
+      }, 100);
+    });
 
+    const filteredTodos = computed(() => {
+      return todos.value.filter(todo => todo.title.toLowerCase().includes(search.value.toLowerCase()));
+    });
+
+    const totalCount = computed(() => {
+      return filteredTodos.value.length;
+    });
+
+    const totalCompleted = computed(() => {
+      return todos.value.filter(todo => todo.completed).length;
+    });
+
+    return {
+      isLoading,
+      selectedTodoId,
+      selectedTodo,
+      search,
+      todos,
+      isDisabled,
+      getTodos,
+      todosGetSuccessfull,
+      todosGetFailed,
+      todosGetLocalStorage,
+      saveTodo,
+      addTodo,
+      deleteTodo,
+      getTodo,
+      getFailed,
+      clearCompleted,
+      filteredTodos,
+      totalCount,
+      totalCompleted
+    };
   }
-
+});
 </script>
-<style lang="scss">
 
+<style lang="scss">
 </style>

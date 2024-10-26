@@ -9,11 +9,12 @@
   </div>
 </template>
 
-<script>
-  import Menu from "./Menu";
-  import Todos from "./Todos";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Menu from "./Menu";
+import Todos from "./Todos";
 
-  export default {
-    components: {Menu, Todos},
-  }
+export default defineComponent({
+  components: { Menu, Todos },
+});
 </script>

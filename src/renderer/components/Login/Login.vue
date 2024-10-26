@@ -52,131 +52,98 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
 
-  import axios from 'axios';
+export default defineComponent({
+  name: 'Login',
+  setup() {
+    const message = ref<string | null>(null);
+    const remember = ref<boolean | null>(null);
+    const mailAddress = ref<string>('');
+    const password = ref<string>('');
 
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        message: null,
-        remember: null,
-        mailAddress: '',
-        password: '',
+    const login = async () => {
+      const config = {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Access-Control-Allow-Origin': '*'
+        },
+        method: 'POST',
+        credentials: 'include',
+        cache: 'no-cache',
       };
-    },
-    created() {
 
-      this.isRememberMe();
+      const data = {
+        mailAddress: mailAddress.value,
+        password: password.value,
+      };
 
+      const url = `${import.meta.env.VITE_SERVER_URL}/api/login`;
 
-      // localStorage.setItem('token', JSON.stringify(this.$token));
-      // console.log("local storage: ", JSON.parse(localStorage.getItem('token')) );
+      try {
+        const response = await axios.post(url, data, config);
+        loginSuccessful(response);
+      } catch (error) {
+        loginFailed(error);
+      }
+    };
 
-    },
-    computed: {
+    const loginSuccessful = (response: any) => {
+      const token = response.data.data;
+      localStorage.setItem('token', JSON.stringify(token));
 
-    },
-
-    methods: {
-
-      login() {
-        const config = {
-          headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*'
-          },
-
-          method: 'POST',
-          credentials: 'include',
-          cache: 'no-cache',
-        };
-
-        const data = {
-          mailAddress: this.mailAddress,
-          password: this.password,
-        };
-
-        const url = `${this.$serverURL}/api/login`;
-
-        axios.post(url, data, config)
-          .then(response => this.loginSuccessful(response))
-          .catch(error => this.loginFailed(error));
-      },
-
-      loginSuccessful(response) {
-        // Local storage a token'ı yaz.
-
-          console.log("Girdi")
-
-        const token = response.data.data;
-
-        localStorage.setItem('token', JSON.stringify(token));
-
-        // console.log("local storage: ", JSON.parse(localStorage.getItem('token')) );
-
-        if(this.remember) {
-          // Remember me is selected
-          this.setRememberMe(this.mailAddress, this.password)
-        } else {
-          // Remember me is not selected
-          this.removeRememberMe()
-        }
-
-        // Adrese yonlendir
-          this.$router.push(this.$route.query.redirect || '/main');
-      },
-      loginFailed(error) {
-        console.log("Failed");
-        this.message = `${error.message} Error: Please check your information: ${error.response.data.message}`;
-
-      },
-
-      setRememberMe(mailAddress,password){
-
-        let remember = {
-          mailAddress: mailAddress,
-          password: password
-        }
-
-        localStorage.setItem('remember', JSON.stringify(remember));
-
-      },
-
-      isRememberMe(){
-        let remember = JSON.parse(localStorage.getItem('remember'));
-
-        if(remember != null) {
-
-          console.log("store dolu, formu doldur")
-          this.remember = true;
-          this.mailAddress = remember.mailAddress;
-          this.password = remember.password;
-
-          // done otomatik olarak bağlan
-
-          if (this.$route.path != "/logout") {
-            this.login();
-          }
-
-
-        } else {
-          console.log("store boş1, bir şey yapma")
-        }
-
-      },
-
-      removeRememberMe() {
-        console.log("Local sotreda remember silindi")
-        localStorage.removeItem('remember');
+      if (remember.value) {
+        setRememberMe(mailAddress.value, password.value);
+      } else {
+        removeRememberMe();
       }
 
+      this.$router.push(this.$route.query.redirect || '/main');
+    };
 
+    const loginFailed = (error: any) => {
+      message.value = `${error.message} Error: Please check your information: ${error.response.data.message}`;
+    };
 
-    },
-  };
+    const setRememberMe = (mailAddress: string, password: string) => {
+      const rememberData = {
+        mailAddress: mailAddress,
+        password: password
+      };
+      localStorage.setItem('remember', JSON.stringify(rememberData));
+    };
 
+    const isRememberMe = () => {
+      const rememberData = JSON.parse(localStorage.getItem('remember') || 'null');
+      if (rememberData) {
+        remember.value = true;
+        mailAddress.value = rememberData.mailAddress;
+        password.value = rememberData.password;
+        if (this.$route.path !== "/logout") {
+          login();
+        }
+      }
+    };
+
+    const removeRememberMe = () => {
+      localStorage.removeItem('remember');
+    };
+
+    onMounted(() => {
+      isRememberMe();
+    });
+
+    return {
+      message,
+      remember,
+      mailAddress,
+      password,
+      login
+    };
+  }
+});
 </script>
 
 <style lang="scss">

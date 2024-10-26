@@ -9,12 +9,12 @@
   </div>
 </template>
 
-<script>
-  import Menu from "./Menu";
-  import SocketTestDetail from "./SocketTestDetail";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Menu from "./Menu";
+import SocketTestDetail from "./SocketTestDetail";
 
-  export default {
-    components: {Menu, SocketTestDetail},
-  }
+export default defineComponent({
+  components: { Menu, SocketTestDetail },
+});
 </script>
-

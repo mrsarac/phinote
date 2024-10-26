@@ -9,12 +9,12 @@
   </div>
 </template>
 
-<script>
-  import Menu from "./Menu";
-  import Notes from "./Notes";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Menu from "./Menu";
+import Notes from "./Notes";
 
-  export default {
-    components: {Menu, Notes},
-  }
+export default defineComponent({
+  components: { Menu, Notes },
+});
 </script>
-
